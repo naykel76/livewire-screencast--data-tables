@@ -7,6 +7,7 @@
     <script src="//cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/@alpinejs/ui@3.13.2-beta.0/dist/cdn.min.js"></script>
     <link href="https://unpkg.com/@tailwindcss/forms@0.2.1/dist/forms.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -89,6 +90,12 @@ $orders = [
                     <div class="text-sm font-normal">Refunded</div>
                     <div class="text-lg font-semibold">12</div>
                 </button>
+            </div>
+
+            <div>
+                <div class="relative h-[10rem] w-full">
+                    <canvas id="chart" class="w-full"></canvas>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2">
@@ -263,5 +270,83 @@ $orders = [
             </div>
         </div>
     </main>
+
+    <script>
+        const chart = document.getElementById('chart');
+
+        new Chart(chart, {
+          type: 'line',
+          data: {
+                labels: ['Nov 12', 'Nov 13', 'Nov 15', 'Nov 25', 'Nov 29', 'Dec 1'],
+                datasets: [{
+                    tension: 0.1,
+                    label: 'Order amount',
+                    data: [1100, 2400, 950, 1500, 3200, 2600],
+                    fill: {
+                        target: 'origin',
+                        above: '#1d4fd810',
+                    },
+                    pointStyle: 'circle',
+                    pointRadius: 0,
+                    pointBackgroundColor: '#5ba5e1',
+                    pointBorderColor: '#5ba5e1',
+                    pointHoverRadius: 4,
+                    borderWidth: 2,
+                }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    displayColors: false,
+                },
+            },
+            hover: {
+                mode: 'index',
+                intersect: false
+            },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                },
+            },
+            scales: {
+                x: {
+                    display: false,
+                    // bounds: 'ticks',
+                    border: { dash: [5, 5] },
+                    ticks: {
+                        // display: false,
+                        // mirror: true,
+                        callback: function(val, index, values) {
+                            let label = this.getLabelForValue(val)
+
+                            return index === 0 || index === values.length - 1 ? '' : label;
+                        }
+                    },
+                    grid: {
+                        border: {
+                            display: false
+                        },
+                    },
+                },
+                y: {
+                    display: false,
+                    border: { display: false },
+                    beginAtZero: true,
+                    grid: { display: false },
+                    ticks: {
+                        display: false
+                    },
+                },
+            }
+          }
+        });
+      </script>
 </body>
 </html>
