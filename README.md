@@ -18,6 +18,7 @@ Things:
 * Add advanced filters
     * Filter by date range
 * Add csv export
+* Add csv import?
 * Make columns configurable
 * Make the table mobile friendly
     * Mobile scrollable

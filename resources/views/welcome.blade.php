@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="//cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/@alpinejs/ui@3.13.2-beta.0/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/@alpinejs/ui@3.13.3-beta.4/dist/cdn.min.js"></script>
     <link href="https://unpkg.com/@tailwindcss/forms@0.2.1/dist/forms.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @livewireStyles
 </head>
 <body>
 
@@ -26,46 +27,122 @@ $orders = [
 ];
 @endphp
 
-    <main class="w-full px-64 flex justify-center pt-12">
+    <main class="w-full px-64 flex justify-center py-12">
         <div class="w-full flex flex-col gap-8">
             <div class="flex justify-between items-center">
                 <h1 class="font-semibold text-3xl text-gray-800">Orders</h1>
 
                 <div class="flex gap-2">
                     <div>
-                        <button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
-                            <div>Daily</div>
+                        <x-popover>
+                            <x-popover.button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
+                                <div>All Products</div>
 
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </button>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                            </x-popover.button>
+
+                            <x-popover.panel class="border border-gray-100 shadow-xl z-10 w-64">
+                                <div class="flex flex-col divide-y divide-gray-100">
+                                    <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" class="rounded border-gray-300">
+                                        <div class="text-sm text-gray-800">All Products</div>
+                                    </label>
+
+                                    <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" class="rounded border-gray-300">
+                                        <div class="text-sm text-gray-800">How to win friends</div>
+                                    </label>
+
+                                    <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" class="rounded border-gray-300">
+                                        <div class="text-sm text-gray-800">Be the best you can be</div>
+                                    </label>
+
+                                    <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" class="rounded border-gray-300">
+                                        <div class="text-sm text-gray-800">Tell a good story</div>
+                                    </label>
+                                </div>
+                            </x-popover.panel>
+                        </x-popover>
                     </div>
 
                     <div>
-                        <button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
-                            <div>All Products</div>
+                        <x-popover>
+                            <x-popover.button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
+                                <div>Last 30 days</div>
 
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                            </x-popover.button>
 
-                    <div>
-                        <button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
-                            <div>Last 30 days</div>
+                            <x-popover.panel class="border border-gray-100 shadow-xl z-10" position="bottom-end">
+                                <div x-data="{ showPicker: false }">
+                                    <div x-show="! showPicker" class="flex flex-col divide-y divide-gray-100 w-64">
+                                        <button class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">Today</div>
+                                        </button>
 
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </button>
+                                        <button class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">Last 7 Days</div>
+                                        </button>
+
+                                        <button class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">Last 30 Days</div>
+                                        </button>
+
+                                        <button class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">This year</div>
+                                        </button>
+
+                                        <button class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">All time</div>
+                                        </button>
+
+                                        <button x-on:click="showPicker = true" class="flex items-center justify-between px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                            <div class="text-sm text-gray-800">Custom range</div>
+
+                                            <div class="text-gray-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <div x-show="showPicker">
+                                        <div class="flex flex-col divide-y divide-gray-100 w-128">
+                                            <button x-on:click="showPicker = false" class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                                <div class="text-gray-500">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                                    </svg>
+                                                </div>
+                                            </button>
+
+                                            <div class="flex flex-col px-3 pt-3 pb-2 gap-4">
+                                                <span class="font-semibold text-gray-800">Is between:</span>
+
+                                                <div class="flex justify-between items-center gap-2">
+                                                    <input type="date" class="text-gray-700 rounded border border-gray-300 bg-white px-2 py-1">
+
+                                                    <span class="text-sm text-gray-700">and</span>
+
+                                                    <input type="date" class="text-gray-700 rounded border border-gray-300 bg-white px-2 py-1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </x-popover.panel>
+                        </x-popover>
                     </div>
                 </div>
             </div>
@@ -76,7 +153,7 @@ $orders = [
                     <div class="text-lg font-semibold">510</div>
                 </button>
 
-                <button class="px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-blue-700 border-2 border-blue-400">
+                <button class="px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-blue-600 border-2 border-blue-400">
                     <div class="text-sm font-normal">Paid</div>
                     <div class="text-lg font-semibold">456</div>
                 </button>
@@ -267,6 +344,12 @@ $orders = [
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="flex justify-end gap-2 pt-4">
+                    <button class="rounded-lg border px-3 py-2 bg-white font-semibold text-sm text-gray-700 hover:bg-gray-100 disabled:bg-gray-50 disabled:opacity-75 disabled:cursor-not-allowed disabled:text-gray-500" disabled>Prev</button>
+
+                    <button class="rounded-lg border px-3 py-2 bg-white font-semibold text-sm text-gray-700 hover:bg-gray-100">Next</button>
+                </div>
             </div>
         </div>
     </main>
@@ -348,5 +431,7 @@ $orders = [
           }
         });
       </script>
+
+    @livewireScripts
 </body>
 </html>
