@@ -16,8 +16,16 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+        $biasedIdx = fake()->biasedNumberBetween(1, 5, fn ($i) => 1 - sqrt($i));
+        $status = $biasedIdx < 4 ? 'paid' : fake()->randomElement(['refunded', 'failed']);
+
         return [
-            //
+            'number' => fake()->randomNumber(5, strict: true),
+            'email' => fake()->unique()->safeEmail(),
+            'amount' => fake()->randomNumber(3, strict: false),
+            'status' => $status,
+            'ordered_at' => fake()->dateTimeBetween('-2 years', 'now'),
+            'store_id' => 1,
         ];
     }
 }
