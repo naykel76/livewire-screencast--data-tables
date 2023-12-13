@@ -4,12 +4,14 @@ namespace App\Livewire\Pages\Order;
 
 use Livewire\WithPagination;
 use Livewire\Component;
+use Livewire\Attributes\Validate;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Renderless;
+use Livewire\Attributes\Lazy;
 use Illuminate\Support\Carbon;
 use App\Models\Store;
 use App\Models\Order;
-use Livewire\Attributes\Validate;
 
 #[Title('Orders')]
 // @todo: naming this "Index" makes it hard to use Cmd+p and search "orders" to find it...
@@ -98,6 +100,68 @@ class Index extends Component
         return $query;
     }
 
+    #[Renderless]
+    public function export()
+    {
+        return response()->streamDownload(function () {
+            $query = $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query())));
+
+            echo $this->toCsv($query);
+        }, 'transactions.csv');
+    }
+
+    public function archive()
+    {
+        sleep(1);
+        // @todo: add auth...
+        // @todo: add a status change to "archived"
+        $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
+
+        foreach ($orders as $order) {
+            $order->archive();
+        }
+    }
+
+    public function archiveOrder(Order $order)
+    {
+        $order->archive();
+    }
+
+    public function refund()
+    {
+        sleep(1);
+        // @todo: add auth...
+        $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
+
+        foreach ($orders as $order) {
+            $order->refund();
+        }
+    }
+
+    public function refundOrder(Order $order)
+    {
+        $order->refund();
+    }
+
+    protected function toCsv($query)
+    {
+        $results = $query->get();
+
+        if ($results->count() < 1) return;
+
+        $titles = implode(',', array_keys((array) $results->first()->getAttributes()));
+
+        $values = $results->map(function ($result) {
+            return implode(',', collect($result->getAttributes())->map(function ($thing) {
+                return '"'.$thing.'"';
+            })->toArray());
+        });
+
+        $values->prepend($titles);
+
+        return $values->implode("\n");
+    }
+
     public function setCustomRange()
     {
         $this->validate();
@@ -173,6 +237,10 @@ class Index extends Component
 
     public function render()
     {
+        if (app('livewire')->isLivewireRequest()) {
+            sleep(1);
+        }
+
         // Handle search...
         $query = $this->search
             ? Order::where('email', 'like', '%'.$this->search.'%')
@@ -268,7 +336,6 @@ class Index extends Component
         return [
             'labels' => $labels,
             'values' => $values,
-            'max' => max($values),
         ];
     }
 }

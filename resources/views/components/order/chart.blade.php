@@ -1,8 +1,8 @@
 @props(['data'])
 
 <div>
-    <div class="relative h-[10rem] w-full" x-data="chart($el)" wire:ignore>
-        <canvas id="chart" class="w-full"></canvas>
+    <div class="relative h-[10rem] w-full" wire:ignore>
+        <canvas class="w-full"></canvas>
     </div>
 </div>
 
@@ -15,19 +15,28 @@
     let chart
 
     $wire.on('update-chart', ({ data }) => {
-        let { labels, values, max } = data
+        if (chart) {
+            updateChart(data)
+        } else {
+            chart = initializeChart(
+                $wire.$el.querySelector('canvas'),
+                data
+            )
+        }
+    })
+
+    function updateChart(data) {
+        let { labels, values } = data
 
         chart.data.labels = labels
         chart.data.datasets[0].data = values
         chart.update()
-    })
+    }
 
-    Alpine.data('chart', (el) => {
-        let canvasEl = el.querySelector('canvas')
+    function initializeChart(el, data) {
+        let { labels, values } = data
 
-        let { labels, values, max } = { labels: [], values: [], max: 0 }
-
-        chart = new Chart(canvasEl, {
+        return new Chart(el, {
             type: 'line',
             data: {
                 labels: labels,
@@ -100,8 +109,6 @@
             }
             }
         })
-
-        return {}
-    })
+    }
 </script>
 @endscript

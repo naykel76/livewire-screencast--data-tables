@@ -18,6 +18,17 @@ class Order extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function archive()
+    {
+        //
+    }
+
+    public function refund()
+    {
+        $this->status = 'refunded';
+        $this->save();
+    }
+
     public function getAvatarAttribute()
     {
         return 'https://i.pravatar.cc/300?img='.((string) crc32($this->email))[0];

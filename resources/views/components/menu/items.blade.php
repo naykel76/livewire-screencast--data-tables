@@ -1,8 +1,7 @@
 <div
     x-menu:items
-    x-transition:enter.origin.top.right
-    x-anchor.bottom-center.offset.10="document.getElementById($id('alpine-menu-button'))"
-    class="w-48 z-10 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-md py-1 outline-none"
+    x-anchor.bottom-end.offset.3="document.getElementById($id('alpine-menu-button'))"
+    class="min-w-[10rem] z-10 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg py-1 outline-none"
     x-cloak
 >
     {{ $slot }}
