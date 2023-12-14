@@ -2,11 +2,10 @@
 
 <div class="grid grid-cols-4 gap-2">
     <button
-        wire:click="$set('status', null)"
         @class([
             'px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-gray-700',
-            'text-gray-700' => $status !== null,
-            'text-blue-600 border-2 border-blue-400' => $status === null,
+            'text-gray-700' => $filters->status !== null,
+            'text-blue-600 border-2 border-blue-400' => $filters->status === null,
         ])
     >
         <div class="text-sm font-normal">All</div>
@@ -14,11 +13,10 @@
     </button>
 
     <button
-        wire:click="$set('status', 'paid')"
         @class([
             'px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-gray-700',
-            'text-gray-700' => $status !== 'paid',
-            'text-blue-600 border-2 border-blue-400' => $status === 'paid',
+            'text-gray-700' => $filters->status !== 'paid',
+            'text-blue-600 border-2 border-blue-400' => $filters->status === 'paid',
         ])
     >
         <div class="text-sm font-normal">Paid</div>
@@ -26,11 +24,10 @@
     </button>
 
     <button
-        wire:click="$set('status', 'failed')"
         @class([
             'px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-gray-700',
-            'text-gray-700' => $status !== 'failed',
-            'text-blue-600 border-2 border-blue-400' => $status === 'failed',
+            'text-gray-700' => $filters->status !== 'failed',
+            'text-blue-600 border-2 border-blue-400' => $filters->status === 'failed',
         ])
     >
         <div class="text-sm font-normal">Failed</div>
@@ -38,11 +35,10 @@
     </button>
 
     <button
-        wire:click="$set('status', 'refunded')"
         @class([
             'px-3 py-2 flex flex-col rounded-xl border hover:border-blue-400 text-gray-700',
-            'text-gray-700' => $status !== 'refunded',
-            'text-blue-600 border-2 border-blue-400' => $status === 'refunded',
+            'text-gray-700' => $filters->status !== 'refunded',
+            'text-blue-600 border-2 border-blue-400' => $filters->status === 'refunded',
         ])
     >
         <div class="text-sm font-normal">Refunded</div>

@@ -13,25 +13,12 @@ use App\Models\Order;
 class Table extends Component
 {
     use WithPagination;
-    use HasOrderFilters;
 
     #[Reactive]
     public Store $store;
 
     #[Reactive]
-    public $range;
-
-    #[Reactive]
-    public $rangeStart;
-
-    #[Reactive]
-    public $rangeEnd;
-
-    #[Reactive]
-    public $status;
-
-    #[Reactive]
-    public $selectedProductIds = [];
+    public Filters $filters;
 
     #[Url]
     public $sortCol;
@@ -84,7 +71,7 @@ class Table extends Component
     public function export()
     {
         return response()->streamDownload(function () {
-            $query = $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query())));
+            $query = $this->filters->filterQuery(Order::query());
 
             echo $this->toCsv($query);
         }, 'transactions.csv');
@@ -153,14 +140,7 @@ class Table extends Component
             ? Order::where('email', 'like', '%'.$this->search.'%')
             : Order::query();
 
-        // Handle product filtering...
-        $this->filterByProduct($query);
-
-        // Handle date range filtering...
-        $this->filterByRange($query);
-
-        // Handle status filtering...
-        $this->filterByStatus($query);
+        $this->filters->filterQuery($query);
 
         // Handle sorting...
         $this->applySorting($query);

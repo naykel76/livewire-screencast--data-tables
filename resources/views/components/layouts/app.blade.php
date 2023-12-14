@@ -6,7 +6,8 @@
     <title>{{ $title ?? 'Livewire Data Tables' }}</title>
 
     <script src="//cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/@alpinejs/ui@3.13.3-beta.4/dist/cdn.min.js"></script>
+    {{-- <script defer src="https://unpkg.com/@alpinejs/ui@3.13.3-beta.4/dist/cdn.min.js"></script> --}}
+    <script defer src="http://alpine.test/packages/ui/dist/cdn.js"></script>
     <link href="https://unpkg.com/@tailwindcss/forms@0.2.1/dist/forms.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @livewireStyles

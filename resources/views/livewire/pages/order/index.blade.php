@@ -3,41 +3,30 @@
         <h1 class="font-semibold text-3xl text-gray-800">Orders</h1>
 
         <div class="flex gap-2">
-            <x-order.filter-products wire:model.live="selectedProductIds" :$products />
+            {{-- <x-order.filter-products wire:model.live="filters.selectedProductIds" :$products /> --}}
 
-            <x-order.filter-dates :$range />
+            {{-- <x-order.filter-dates :$filters /> --}}
         </div>
     </div>
 
-    {{-- <x-order.filter-status :$counts :$status /> --}}
+    <button type="button" x-bind:id="'hey'">testing</button>
 
-    <livewire:pages.order.filter-status wire:model.live="status"
-        :$store
-        :$status
-        :$range
-        :$rangeStart
-        :$rangeEnd
-        :$selectedProductIds
-        lazy
-    />
+    <button wire:click="$set('filters.status', 'all')">filter</button>
 
-    <livewire:pages.order.chart
+    {{-- <livewire:pages.order.filter-status wire:model.live="filters"
         :$store
-        :$range
-        :$rangeStart
-        :$rangeEnd
-        :$status
-        :$selectedProductIds
+        :$filters
         lazy
-    />
+    /> --}}
+
+    {{-- <livewire:pages.order.chart
+        :$store
+        :$filters
+        lazy
+    /> --}}
 
     <livewire:pages.order.table
         :$store
-        :$range
-        :$rangeStart
-        :$rangeEnd
-        :$status
-        :$selectedProductIds
-        lazy
+        :$filters
     />
 </div>

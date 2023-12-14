@@ -10,34 +10,20 @@ use App\Models\Order;
 
 class FilterStatus extends Component
 {
-    use HasOrderFilters;
-
     #[Reactive]
     public Store $store;
 
-    #[Reactive]
-    public $range;
-
-    #[Reactive]
-    public $rangeStart;
-
-    #[Reactive]
-    public $rangeEnd;
-
     #[Modelable]
-    public $status;
-
-    #[Reactive]
-    public $selectedProductIds = [];
+    public Filters $filters;
 
     public function render()
     {
         return view('livewire.pages.order.filter-status', [
             'counts' => [
-                'all' => $this->filterByRange(Order::whereIn('product_id', $this->selectedProductIds))->count(),
-                'paid' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'paid')))->count(),
-                'failed' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'failed')))->count(),
-                'refunded' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'refunded')))->count(),
+                'all' => $this->filters->filterQuery(Order::query(), status: 'all')->count(),
+                'paid' => $this->filters->filterQuery(Order::query(), status: 'paid')->count(),
+                'failed' => $this->filters->filterQuery(Order::query(), status: 'failed')->count(),
+                'refunded' => $this->filters->filterQuery(Order::query(), status: 'refunded')->count(),
             ],
         ]);
     }
@@ -45,7 +31,7 @@ class FilterStatus extends Component
     public function placeholder()
     {
         return view('livewire.pages.order.filter-status-placeholder', [
-            'status' => $this->status,
+            'filters' => $this->filters,
             'counts' => [
                 'all' => '...',
                 'paid' => '...',

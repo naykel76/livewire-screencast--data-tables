@@ -14,7 +14,7 @@
             <div class="flex flex-col divide-y divide-gray-100">
                 @foreach ($products as $product)
                     <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
-                        <input value="{{ $product->id }}" wire:model="selectedProductIds" type="checkbox" class="rounded border-gray-300">
+                        <input value="{{ $product->id }}" wire:model="form.selectedProductIds" type="checkbox" class="rounded border-gray-300">
 
                         <div class="text-sm text-gray-800">{{ $product->name }}</div>
                     </label>
