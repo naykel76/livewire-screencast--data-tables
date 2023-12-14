@@ -18,10 +18,12 @@
         if (chart) {
             updateChart(data)
         } else {
-            chart = initializeChart(
-                $wire.$el.querySelector('canvas'),
-                data
-            )
+            setTimeout(() => {
+                chart = initializeChart(
+                    $wire.$el.querySelector('canvas'),
+                    data
+                )
+            })
         }
     })
 

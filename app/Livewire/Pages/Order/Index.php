@@ -2,12 +2,10 @@
 
 namespace App\Livewire\Pages\Order;
 
-use Livewire\WithPagination;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Renderless;
 use Livewire\Attributes\Lazy;
 use Illuminate\Support\Carbon;
 use App\Models\Store;
@@ -17,11 +15,9 @@ use App\Models\Order;
 // @todo: naming this "Index" makes it hard to use Cmd+p and search "orders" to find it...
 class Index extends Component
 {
-    use WithPagination;
+    use HasOrderFilters;
 
     public Store $store;
-
-    public $search = '';
 
     // @todo: when range=null is set in the query string by hand it won't be removed...
     // This is annoying because refreshing the page then chaning back to "all-time" causes this...
@@ -39,21 +35,11 @@ class Index extends Component
     public $rangeEnd;
 
     #[Url]
-    public $status = null;
-
-    #[Url]
-    public $sortCol = null;
-
-    #[Url]
-    public $sortAsc = true;
+    public $status = 'paid';
 
     // @todo: it would be nice to have cleaner array representation in the query string...
     #[Url]
     public $selectedProductIds = [];
-
-    public $selectedOrderIds = [];
-
-    public $orderIdsOnPage = [];
 
     public $showRangeDropdown = false;
 
@@ -65,103 +51,6 @@ class Index extends Component
         }
     }
 
-    public function updated($fullPath)
-    {
-        $this->resetPage();
-
-        if (str($fullPath)->before('.')->toString() !== 'selectedOrderIds') {
-            $this->selectedOrderIds = [];
-        }
-    }
-
-    public function sortBy($col)
-    {
-        if ($this->sortCol === $col) {
-            $this->sortAsc = ! $this->sortAsc;
-        } else {
-            $this->sortCol = $col;
-            $this->sortAsc = true;
-        }
-    }
-
-    protected function applySorting($query)
-    {
-        if ($this->sortCol) {
-            $column = match ($this->sortCol) {
-                'number' => 'number',
-                'date' => 'ordered_at',
-                'status' => 'status',
-                'amount' => 'amount',
-            };
-
-            $query->orderBy($column, $this->sortAsc ? 'asc' : 'desc');
-        }
-
-        return $query;
-    }
-
-    #[Renderless]
-    public function export()
-    {
-        return response()->streamDownload(function () {
-            $query = $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query())));
-
-            echo $this->toCsv($query);
-        }, 'transactions.csv');
-    }
-
-    public function archive()
-    {
-        sleep(1);
-        // @todo: add auth...
-        // @todo: add a status change to "archived"
-        $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
-
-        foreach ($orders as $order) {
-            $order->archive();
-        }
-    }
-
-    public function archiveOrder(Order $order)
-    {
-        $order->archive();
-    }
-
-    public function refund()
-    {
-        sleep(1);
-        // @todo: add auth...
-        $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
-
-        foreach ($orders as $order) {
-            $order->refund();
-        }
-    }
-
-    public function refundOrder(Order $order)
-    {
-        $order->refund();
-    }
-
-    protected function toCsv($query)
-    {
-        $results = $query->get();
-
-        if ($results->count() < 1) return;
-
-        $titles = implode(',', array_keys((array) $results->first()->getAttributes()));
-
-        $values = $results->map(function ($result) {
-            return implode(',', collect($result->getAttributes())->map(function ($thing) {
-                return '"'.$thing.'"';
-            })->toArray());
-        });
-
-        $values->prepend($titles);
-
-        return $values->implode("\n");
-    }
-
     public function setCustomRange()
     {
         $this->validate();
@@ -171,171 +60,10 @@ class Index extends Component
         $this->showRangeDropdown = false;
     }
 
-    protected function filterByRange($query)
-    {
-        switch ($this->range) {
-            case 'today':
-                $query->whereDate('ordered_at', Carbon::today());
-                break;
-
-            case 'last7':
-                $query->whereBetween('ordered_at', [Carbon::today()->subDays(6), Carbon::now()]);
-                break;
-
-            case 'last30':
-                $query->whereBetween('ordered_at', [Carbon::today()->subDays(29), Carbon::now()]);
-                break;
-
-            case 'year':
-                $query->whereBetween('ordered_at', [Carbon::now()->startOfYear(), Carbon::now()]);
-                break;
-
-            case 'custom':
-                $start = Carbon::createFromFormat('Y-m-d', $this->rangeStart);
-                $end = Carbon::createFromFormat('Y-m-d', $this->rangeEnd);
-                $query->whereBetween('ordered_at', [$start, $end]);
-                break;
-
-            default:
-                # code...
-                break;
-        }
-
-        return $query;
-    }
-
-    protected function filterByStatus($query, $status = null)
-    {
-        $status = $status ?: $this->status;
-
-        switch ($status) {
-            case 'paid':
-                $query->where('status', 'paid');
-                break;
-
-            case 'refunded':
-                $query->where('status', 'refunded');
-                break;
-
-            case 'failed':
-                $query->where('status', 'failed');
-                break;
-
-            default:
-                # code...
-                break;
-        }
-
-        return $query;
-    }
-
-    protected function filterByProduct($query) {
-        $query->whereIn('product_id', $this->selectedProductIds);
-
-        return $query;
-    }
-
     public function render()
     {
-        if (app('livewire')->isLivewireRequest()) {
-            sleep(1);
-        }
-
-        // Handle search...
-        $query = $this->search
-            ? Order::where('email', 'like', '%'.$this->search.'%')
-            : Order::query();
-
-        // Handle product filtering...
-        $this->filterByProduct($query);
-
-        // Handle date range filtering...
-        $this->filterByRange($query);
-
-        // Handle status filtering...
-        $this->filterByStatus($query);
-
-        // Handle sorting...
-        $this->applySorting($query);
-
-        // Handle pagination...
-        // @todo: reset pagination when search changes...
-        $orders = $query->paginate(10);
-
-        // @todo: find a better way...
-        // @todo: make scripts run before dispatches (because /supportEvents is use in imports earlier on...)
-        $this->dispatch('update-chart', data: $this->getChartData())->self();
-
-        $this->orderIdsOnPage = $orders->map(fn ($i) => (string) $i->id)->toArray();
-
         return view('livewire.pages.order.index', [
-            'orders' => $orders,
             'products' => $this->store->products,
-            'counts' => [
-                'all' => $this->filterByRange(Order::whereIn('product_id', $this->selectedProductIds))->count(),
-                'paid' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'paid')))->count(),
-                'failed' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'failed')))->count(),
-                'refunded' => $this->filterByProduct($this->filterByRange($this->filterByStatus(Order::query(), 'refunded')))->count(),
-            ],
         ]);
-    }
-
-    public function getChartData()
-    {
-        if ($this->range === 'today') {
-            $result = Order::select(
-                \Illuminate\Support\Facades\DB::raw('HOUR(ordered_at) as hour'),
-                \Illuminate\Support\Facades\DB::raw('SUM(amount) as hourly_total')
-            )
-            ->whereBetween('ordered_at', [Carbon::today()->subDays(1), Carbon::now()])
-            ->tap(function ($query) {
-                $this->filterByStatus($query);
-                $this->filterByProduct($query);
-            })
-            ->groupBy('hour')
-            ->get()
-            ->mapWithKeys(function ($i) {
-                $label = $i->hour;
-                $value = (int) $i->hourly_total;
-
-                return [$label => $value];
-            })
-            ->toArray();
-        } else {
-            $result = Order::select(
-                \Illuminate\Support\Facades\DB::raw('DATE(ordered_at) as date'),
-                \Illuminate\Support\Facades\DB::raw('SUM(amount) as daily_total')
-            )
-            ->tap(function ($query) {
-                $this->filterByStatus($query);
-                $this->filterByProduct($query);
-            })
-            ->where(function ($query) {
-                return match ($this->range) {
-                    null => $query,
-                    'year' => $query->whereBetween('ordered_at', [Carbon::now()->startOfYear(), Carbon::now()]),
-                    'last30' => $query->whereBetween('ordered_at', [Carbon::today()->subDays(29), Carbon::now()]),
-                    'last7' => $query->whereBetween('ordered_at', [Carbon::today()->subDays(6), Carbon::now()]),
-                    'custom' => $query->whereBetween('ordered_at', [Carbon::createFromFormat('Y-m-d', $this->rangeStart), Carbon::createFromFormat('Y-m-d', $this->rangeEnd)]),
-                };
-            })
-            ->groupBy('date')
-            ->get()
-            ->mapWithKeys(function ($i) {
-                $label = $i->date;
-                $value = (int) $i->daily_total;
-
-                return [$label => $value];
-            })
-            ->toArray();
-        }
-
-        $labels = array_keys($result);
-        $values = array_values($result);
-
-        return [
-            'labels' => $labels,
-            'values' => $values,
-        ];
     }
 }
