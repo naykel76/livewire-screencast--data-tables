@@ -1,8 +1,8 @@
 <div class="flex flex-col gap-8">
     <div class="grid grid-cols-2 gap-2">
-        {{-- <x-order.search />
+        <x-show-orders.search />
 
-        <x-order.bulk-actions /> --}}
+        <x-show-orders.bulk-actions />
     </div>
 
     <div x-data="{ open: false }" x-show="open" x-transition.opacity.duration.500ms x-init="setTimeout(() => open = true)">
@@ -14,7 +14,7 @@
                             <div class="flex items-center">
                                 {{-- @todo: this would be a nice API: --}}
                                 {{-- <x-order.check-all wire:model="selectedProductIds" wire:bind="orderIdsOnPage" /> --}}
-                                {{-- <x-order.check-all /> --}}
+                                <x-show-orders.check-all />
                             </div>
                         </th>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
@@ -192,8 +192,7 @@
                             </td>
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="flex items-center justify-end">
-                                    {{-- <x-order.row-dropdown :$order /> --}}
-                                    <span x-text="'hey'"></span>
+                                    <x-show-orders.row-dropdown :$order />
                                 </div>
                             </td>
                         </tr>
@@ -215,13 +214,12 @@
             </div>
         </div>
 
-
         <div class="pt-4 flex justify-between items-center">
             <div class="text-gray-700 text-sm">
                 Results: {{ \Illuminate\Support\Number::format($orders->total()) }}
             </div>
 
-            <x-order.pagination :$orders />
+            <x-show-orders.pagination :$orders />
         </div>
     </div>
 </div>

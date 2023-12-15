@@ -4,7 +4,7 @@
     <x-popover wire:model="showRangeDropdown">
         <x-popover.button class="flex items-center gap-2 rounded-lg border pl-3 pr-2 py-1 text-gray-600 text-sm">
             <div>
-                @switch($filters)
+                @switch($filters->range)
                     @case('today')
                         Today
                         @break
@@ -40,7 +40,7 @@
                     <button wire:click="$set('filters.range', 'today')" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <div class="text-sm">Today</div>
 
-                        @if ($filters === 'today')
+                        @if ($filters->range === 'today')
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                             </svg>
@@ -50,7 +50,7 @@
                     <button wire:click="$set('filters.range', 'last7')" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <div class="text-sm">Last 7 Days</div>
 
-                        @if ($filters === 'last7')
+                        @if ($filters->range === 'last7')
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                             </svg>
@@ -60,7 +60,7 @@
                     <button wire:click="$set('filters.range', 'last30')" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <div class="text-sm">Last 30 Days</div>
 
-                        @if ($filters === 'last30')
+                        @if ($filters->range === 'last30')
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                             </svg>
@@ -70,7 +70,7 @@
                     <button wire:click="$set('filters.range', 'year')" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <div class="text-sm">This year</div>
 
-                        @if ($filters === 'year')
+                        @if ($filters->range === 'year')
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                             </svg>
@@ -80,7 +80,7 @@
                     <button wire:click="$set('filters.range', null)" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <div class="text-sm">All time</div>
 
-                        @if ($filters === null)
+                        @if ($filters->range === null)
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                             </svg>

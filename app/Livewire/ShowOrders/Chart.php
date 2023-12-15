@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Pages\Order;
+namespace App\Livewire\ShowOrders;
 
 use Livewire\Component;
 use Livewire\Attributes\Reactive;
@@ -81,11 +81,11 @@ class Chart extends Component
         // @todo: make scripts run before dispatches (because /supportEvents is use in imports earlier on...)
         $this->dispatch('update-chart', data: $this->getChartData())->self();
 
-        return view('livewire.pages.order.chart');
+        return view('livewire.show-orders.chart');
     }
 
     public function placeholder()
     {
-        return view('livewire.pages.order.chart-placeholder');
+        return view('livewire.show-orders.chart-placeholder');
     }
 }

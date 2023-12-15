@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/store/{store}/orders', \App\Livewire\Pages\Order\Index::class);
+Route::get('/store/{store}/orders', \App\Livewire\ShowOrders\Page::class);
 
 Route::get('/', function () {
     return view('welcome');

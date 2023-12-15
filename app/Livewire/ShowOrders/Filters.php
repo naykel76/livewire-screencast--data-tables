@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Livewire\Pages\Order;
+namespace App\Livewire\ShowOrders;
 
 use Livewire\Features\SupportFormObjects\Form;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Carbon;
+use App\Models\Store;
 
 class Filters extends Form
 {
+    public Store $store;
     // @todo: when range=null is set in the query string by hand it won't be removed...
     // This is annoying because refreshing the page then chaning back to "all-time" causes this...
     // And the url is cleaned up. Would be nice to have an option "force" cleanliness...
@@ -31,12 +33,30 @@ class Filters extends Form
     #[Url(as: 'products')]
     public $selectedProductIds = [];
 
-    public function initializeSelectedProducts($store)
+    public $showRangeDropdown = false;
+
+    public function initialize($store)
     {
+        $this->store = $store;
+
         // Only set the product IDs if there isn't any in the query string...
         if (request()->query('products', false) === false) {
             $this->selectedProductIds = $store->products->map(fn($i) => (string) $i->id)->toArray();
         }
+    }
+
+    public function setCustomRange()
+    {
+        $this->validate();
+
+        $this->range = 'custom';
+
+        $this->showRangeDropdown = false;
+    }
+
+    public function getProducts()
+    {
+        return $this->store->products;
     }
 
     public function filterQuery($query, $status = null) {

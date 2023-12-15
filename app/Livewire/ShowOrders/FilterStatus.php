@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Pages\Order;
+namespace App\Livewire\ShowOrders;
 
 use Livewire\Component;
 use Livewire\Attributes\Reactive;
@@ -18,7 +18,7 @@ class FilterStatus extends Component
 
     public function render()
     {
-        return view('livewire.pages.order.filter-status', [
+        return view('livewire.show-orders.filter-status', [
             'counts' => [
                 'all' => $this->filters->filterQuery(Order::query(), status: 'all')->count(),
                 'paid' => $this->filters->filterQuery(Order::query(), status: 'paid')->count(),
@@ -30,7 +30,7 @@ class FilterStatus extends Component
 
     public function placeholder()
     {
-        return view('livewire.pages.order.filter-status-placeholder', [
+        return view('livewire.show-orders.filter-status-placeholder', [
             'filters' => $this->filters,
             'counts' => [
                 'all' => '...',

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Pages\Order;
+namespace App\Livewire\ShowOrders;
 
 enum ProductEnum: string
 {

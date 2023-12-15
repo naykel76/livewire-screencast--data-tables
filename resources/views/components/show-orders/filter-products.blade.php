@@ -1,4 +1,4 @@
-@props(['products'])
+@props(['filters'])
 
 <div wire:ignore> {{-- @todo: without wire:ignore there's ui flashing and focus loss... --}}
     <x-popover>
@@ -14,7 +14,7 @@
 
         <x-popover.panel class="border border-gray-100 shadow-xl z-10 w-64">
             <div class="flex flex-col divide-y divide-gray-100">
-                @foreach ($products as $product)
+                @foreach ($filters->getProducts() as $product)
                     <label class="flex items-center px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                         <input value="{{ $product->id }}" {{ $attributes->whereStartsWith('wire:model') }} hey="there" type="checkbox" class="rounded border-gray-300">
 
