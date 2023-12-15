@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\ShowOrders;
+namespace App\Livewire\Order\Index;
 
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -130,7 +130,7 @@ class Table extends Component
 
     public function placeholder()
     {
-        return view('livewire.show-orders.table-placeholder');
+        return view('livewire.order.index.table-placeholder');
     }
 
     public function render()
@@ -151,7 +151,7 @@ class Table extends Component
 
         $this->orderIdsOnPage = $orders->map(fn ($i) => (string) $i->id)->toArray();
 
-        return view('livewire.show-orders.table', [
+        return view('livewire.order.index.table', [
             'orders' => $orders,
         ]);
     }

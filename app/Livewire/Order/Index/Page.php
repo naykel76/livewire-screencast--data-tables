@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\ShowOrders;
+namespace App\Livewire\Order\Index;
 
 use Livewire\Attributes\{ Validate, Url, Title, Lazy };
 use App\Models\{ Store, Order };
@@ -26,7 +26,7 @@ class Page extends Component
 
     public function render()
     {
-        return view('livewire.show-orders.page', [
+        return view('livewire.order.index.page', [
             'products' => $this->store->products,
         ]);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\ShowOrders;
+namespace App\Livewire\Order\Index;
 
 use Livewire\Features\SupportFormObjects\Form;
 use Livewire\Attributes\Validate;

@@ -3,25 +3,25 @@
         <h1 class="font-semibold text-3xl text-gray-800">Orders</h1>
 
         <div class="flex gap-2">
-            <x-show-orders.filter-products :$filters wire:model.live="filters.selectedProductIds" :$products />
+            <x-order.index.filter-products :$filters wire:model.live="filters.selectedProductIds" :$products />
 
-            <x-show-orders.filter-dates :$filters />
+            <x-order.index.filter-dates :$filters />
         </div>
     </div>
 
-    <livewire:show-orders.filter-status wire:model.live="filters"
+    <livewire:order.index.filter-status wire:model.live="filters"
         :$store
         :$filters
         lazy
     />
 
-    <livewire:show-orders.chart
+    <livewire:order.index.chart
         :$store
         :$filters
         lazy
     />
 
-    <livewire:show-orders.table
+    <livewire:order.index.table
         :$store
         :$filters
     />
