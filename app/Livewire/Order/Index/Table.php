@@ -12,19 +12,13 @@ use App\Models\Order;
 
 class Table extends Component
 {
-    use WithPagination;
+    use WithPagination, Sortable;
 
     #[Reactive]
     public Store $store;
 
     #[Reactive]
     public Filters $filters;
-
-    #[Url]
-    public $sortCol;
-
-    #[Url]
-    public $sortAsc;
 
     public $search = '';
 
@@ -41,37 +35,11 @@ class Table extends Component
         }
     }
 
-    public function sortBy($col)
-    {
-        if ($this->sortCol === $col) {
-            $this->sortAsc = ! $this->sortAsc;
-        } else {
-            $this->sortCol = $col;
-            $this->sortAsc = true;
-        }
-    }
-
-    protected function applySorting($query)
-    {
-        if ($this->sortCol) {
-            $column = match ($this->sortCol) {
-                'number' => 'number',
-                'date' => 'ordered_at',
-                'status' => 'status',
-                'amount' => 'amount',
-            };
-
-            $query->orderBy($column, $this->sortAsc ? 'asc' : 'desc');
-        }
-
-        return $query;
-    }
-
     #[Renderless]
     public function export()
     {
         return response()->streamDownload(function () {
-            $query = $this->filters->filterQuery(Order::query());
+            $query = $this->filters->apply(Order::query());
 
             echo $this->toCsv($query);
         }, 'transactions.csv');
@@ -80,32 +48,34 @@ class Table extends Component
     public function archive()
     {
         sleep(1);
-        // @todo: add auth...
         // @todo: add a status change to "archived"
-        $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
+        $orders = $this->store->orders()->whereIn('id', $this->selectedOrderIds)->get();
 
         foreach ($orders as $order) {
-            $order->archive();
+            $this->archive($order);
         }
     }
 
     public function archiveOrder(Order $order)
     {
+        $this->authorize('update', $order);
+
         $order->archive();
     }
 
     public function refund()
     {
-        // @todo: add auth...
         $orders = Order::whereIn('id', $this->selectedOrderIds)->get();
 
         foreach ($orders as $order) {
-            $order->refund();
+            $this->refundOrder($order);
         }
     }
 
     public function refundOrder(Order $order)
     {
+        $this->authorize('update', $order);
+
         $order->refund();
     }
 
@@ -137,10 +107,11 @@ class Table extends Component
     {
         // Handle search...
         $query = $this->search
-            ? Order::where('email', 'like', '%'.$this->search.'%')
-            : Order::query();
+            ? $this->store->orders()->where('email', 'like', '%'.$this->search.'%')
+            : $this->store->orders();
 
-        $this->filters->filterQuery($query);
+        // Handle products, date range, and status...
+        $this->filters->apply($query);
 
         // Handle sorting...
         $this->applySorting($query);

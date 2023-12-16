@@ -2,9 +2,8 @@
 
 namespace App\Livewire\Order\Index;
 
-use Livewire\Component;
 use Livewire\Attributes\Reactive;
-use Illuminate\Support\Carbon;
+use Livewire\Component;
 use App\Models\Store;
 use App\Models\Order;
 
@@ -18,60 +17,31 @@ class Chart extends Component
 
     public function getChartData()
     {
-        if ($this->filters->range === 'today') {
-            $result = Order::select(
-                \Illuminate\Support\Facades\DB::raw('HOUR(ordered_at) as hour'),
-                \Illuminate\Support\Facades\DB::raw('SUM(amount) as hourly_total')
+        $queryWithDayOrHourIncrements = $this->filters->range === Range::Today
+            ? $this->store->orders()->select(
+                \Illuminate\Support\Facades\DB::raw('HOUR(ordered_at) as time_increment'),
+                \Illuminate\Support\Facades\DB::raw('SUM(amount) as total')
             )
-            ->whereBetween('ordered_at', [Carbon::today()->subDays(1), Carbon::now()])
-            ->tap(function ($query) {
-                $this->filters->filterByStatus($query);
-                $this->filters->filterByProduct($query);
-            })
-            ->groupBy('hour')
+            : $this->store->orders()->select(
+                \Illuminate\Support\Facades\DB::raw('DATE(ordered_at) as time_increment'),
+                \Illuminate\Support\Facades\DB::raw('SUM(amount) as total')
+            );
+
+        $result = $queryWithDayOrHourIncrements
+            ->tap($this->filters->apply(...))
+            ->groupBy('time_increment')
             ->get()
             ->mapWithKeys(function ($i) {
-                $label = $i->hour;
-                $value = (int) $i->hourly_total;
+                $label = $i->time_increment;
+                $value = (int) $i->total;
 
                 return [$label => $value];
             })
             ->toArray();
-        } else {
-            $result = Order::select(
-                \Illuminate\Support\Facades\DB::raw('DATE(ordered_at) as date'),
-                \Illuminate\Support\Facades\DB::raw('SUM(amount) as daily_total')
-            )
-            ->tap(function ($query) {
-                $this->filters->filterByStatus($query);
-                $this->filters->filterByProduct($query);
-            })
-            ->where(function ($query) {
-                return match ($this->filters->range) {
-                    null => $query,
-                    'year' => $query->whereBetween('ordered_at', [Carbon::now()->startOfYear(), Carbon::now()]),
-                    'last30' => $query->whereBetween('ordered_at', [Carbon::today()->subDays(29), Carbon::now()]),
-                    'last7' => $query->whereBetween('ordered_at', [Carbon::today()->subDays(6), Carbon::now()]),
-                    'custom' => $query->whereBetween('ordered_at', [Carbon::createFromFormat('Y-m-d', $this->filters->rangeStart), Carbon::createFromFormat('Y-m-d', $this->filters->rangeEnd)]),
-                };
-            })
-            ->groupBy('date')
-            ->get()
-            ->mapWithKeys(function ($i) {
-                $label = $i->date;
-                $value = (int) $i->daily_total;
-
-                return [$label => $value];
-            })
-            ->toArray();
-        }
-
-        $labels = array_keys($result);
-        $values = array_values($result);
 
         return [
-            'labels' => $labels,
-            'values' => $values,
+            'labels' => array_keys($result),
+            'values' => array_values($result),
         ];
     }
 

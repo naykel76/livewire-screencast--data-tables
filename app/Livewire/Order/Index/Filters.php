@@ -11,27 +11,26 @@ use App\Models\Store;
 class Filters extends Form
 {
     public Store $store;
+
     // @todo: when range=null is set in the query string by hand it won't be removed...
     // This is annoying because refreshing the page then chaning back to "all-time" causes this...
     // And the url is cleaned up. Would be nice to have an option "force" cleanliness...
     // Like Jess and Tim noticed...
     #[Url]
-    public $range = null;
-
-    #[Url]
-    public $status = 'all';
-
-    #[Url(as: 'start')]
-    #[Validate('required', message: 'You are missing the start date.')]
-    public $rangeStart;
-
-    #[Url(as: 'end')]
-    #[Validate('required', message: 'You are missing the end date.')]
-    public $rangeEnd;
+    public Status $status = Status::All;
 
     // @todo: it would be nice to have cleaner array representation in the query string...
     #[Url(as: 'products')]
     public $selectedProductIds = [];
+
+    #[Url]
+    public Range $range = Range::All_Time;
+
+    #[Url, Validate('required', message: 'You are missing the start date.')]
+    public $start;
+
+    #[Url, Validate('required', message: 'You are missing the end date.')]
+    public $end;
 
     public $showRangeDropdown = false;
 
@@ -41,15 +40,13 @@ class Filters extends Form
 
         // Only set the product IDs if there isn't any in the query string...
         if (request()->query('products', false) === false) {
-            $this->selectedProductIds = $store->products->map(fn($i) => (string) $i->id)->toArray();
+            $this->selectedProductIds = $store->products->map(fn ($i) => (string) $i->id)->toArray();
         }
     }
 
     public function setCustomRange()
     {
-        $this->validate();
-
-        $this->range = 'custom';
+        $this->range = Range::Custom;
 
         $this->showRangeDropdown = false;
     }
@@ -59,81 +56,37 @@ class Filters extends Form
         return $this->store->products;
     }
 
-    public function filterQuery($query, $status = null) {
-        return $this->filterByRange(
-            $this->filterByProduct(
-                $this->filterByStatus(
-                    $query, $status
-                )
-            )
-        );
-    }
-
-    public function filterByRange($query)
-    {
-        switch ($this->range) {
-            case 'today':
-                $query->whereDate('ordered_at', Carbon::today());
-                break;
-
-            case 'last7':
-                $query->whereBetween('ordered_at', [Carbon::today()->subDays(6), Carbon::now()]);
-                break;
-
-            case 'last30':
-                $query->whereBetween('ordered_at', [Carbon::today()->subDays(29), Carbon::now()]);
-                break;
-
-            case 'year':
-                $query->whereBetween('ordered_at', [Carbon::now()->startOfYear(), Carbon::now()]);
-                break;
-
-            case 'custom':
-                $start = Carbon::createFromFormat('Y-m-d', $this->rangeStart);
-                $end = Carbon::createFromFormat('Y-m-d', $this->rangeEnd);
-                $query->whereBetween('ordered_at', [$start, $end]);
-                break;
-
-            default:
-                # code...
-                break;
-        }
+    public function apply($query, $status = null) {
+        $query = $this->applyStatus($query, $status);
+        $query = $this->applyProduct($query);
+        $query = $this->applyRange($query);
 
         return $query;
     }
 
-    public function filterByProduct($query) {
-        $query->whereIn('product_id', $this->selectedProductIds);
-
-        return $query;
+    protected function applyProduct($query) {
+        return $query->whereIn('product_id', $this->selectedProductIds);
     }
 
-    public function filterByStatus($query, $status = null)
+    protected function applyStatus($query, $status = null)
     {
         $status = $status ?: $this->status;
 
-        switch ($status) {
-            case 'paid':
-                $query->where('status', 'paid');
-                break;
+        return match ($status) {
+            Status::Paid => $query->where('status', 'paid'),
+            Status::Refunded => $query->where('status', 'refunded'),
+            Status::Failed => $query->where('status', 'failed'),
+            default => $query,
+        };
+    }
 
-            case 'refunded':
-                $query->where('status', 'refunded');
-                break;
+    protected function applyRange($query)
+    {
+        $dateRange = $this->range->dates(
+            $this->start,
+            $this->end,
+        );
 
-            case 'failed':
-                $query->where('status', 'failed');
-                break;
-
-            case 'all':
-                //
-                break;
-
-            default:
-                # code...
-                break;
-        }
-
-        return $query;
+        return $query->whereBetween('ordered_at', $dateRange);
     }
 }

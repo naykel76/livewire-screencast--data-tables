@@ -2,11 +2,10 @@
 
 namespace App\Livewire\Order\Index;
 
-use Livewire\Component;
-use Livewire\Attributes\Reactive;
 use Livewire\Attributes\Modelable;
+use Livewire\Attributes\Reactive;
+use Livewire\Component;
 use App\Models\Store;
-use App\Models\Order;
 
 class FilterStatus extends Component
 {
@@ -16,28 +15,41 @@ class FilterStatus extends Component
     #[Modelable]
     public Filters $filters;
 
+    protected function statuses()
+    {
+        return collect($this->filters->status::cases())->map(function ($status) {
+            return [
+                'current' => $status === $this->filters->status,
+                'label' => $status->label(),
+                'value' => $status->value,
+                'count' => $this->filters->apply($this->store->orders(), $status)->count(),
+            ];
+        });
+    }
+
+    protected function placeholderStatuses()
+    {
+        return collect($this->filters->status::cases())->map(function ($status) {
+            return [
+                'current' => $status === $this->filters->status,
+                'label' => $status->label(),
+                'value' => $status->value,
+                'count' => '...',
+            ];
+        });
+    }
+
     public function render()
     {
         return view('livewire.order.index.filter-status', [
-            'counts' => [
-                'all' => $this->filters->filterQuery(Order::query(), status: 'all')->count(),
-                'paid' => $this->filters->filterQuery(Order::query(), status: 'paid')->count(),
-                'failed' => $this->filters->filterQuery(Order::query(), status: 'failed')->count(),
-                'refunded' => $this->filters->filterQuery(Order::query(), status: 'refunded')->count(),
-            ],
+            'statuses' => $this->statuses(),
         ]);
     }
 
     public function placeholder()
     {
         return view('livewire.order.index.filter-status-placeholder', [
-            'filters' => $this->filters,
-            'counts' => [
-                'all' => '...',
-                'paid' => '...',
-                'failed' => '...',
-                'refunded' => '...',
-            ]
+            'statuses' => $this->placeholderStatuses(),
         ]);
     }
 }

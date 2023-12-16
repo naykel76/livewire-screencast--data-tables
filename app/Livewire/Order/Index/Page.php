@@ -2,10 +2,9 @@
 
 namespace App\Livewire\Order\Index;
 
-use Livewire\Attributes\{ Validate, Url, Title, Lazy };
-use App\Models\{ Store, Order };
-use Illuminate\Support\Carbon;
+use Livewire\Attributes\Title;
 use Livewire\Component;
+use App\Models\Store;
 
 #[Title('Show orders')]
 class Page extends Component
@@ -22,12 +21,5 @@ class Page extends Component
     public function setCustomRange()
     {
         $this->filters->setCustomRange();
-    }
-
-    public function render()
-    {
-        return view('livewire.order.index.page', [
-            'products' => $this->store->products,
-        ]);
     }
 }
