@@ -30,9 +30,6 @@ enum Range: string
     public function dates($start, $end)
     {
         return match ($this) {
-            // @todo: what to do here:
-            static::All_Time => [Carbon::now()->subYears(10), now()],
-
             static::Today => [Carbon::today(), now()],
             static::Last_7 => [Carbon::today()->subDays(6), now()],
             static::Last_30 => [Carbon::today()->subDays(29), now()],

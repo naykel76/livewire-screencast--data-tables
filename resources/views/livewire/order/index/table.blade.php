@@ -12,8 +12,6 @@
                     <tr>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <div class="flex items-center">
-                                {{-- @todo: this would be a nice API: --}}
-                                {{-- <x-order.check-all wire:model="selectedProductIds" wire:bind="orderIdsOnPage" /> --}}
                                 <x-order.index.check-all />
                             </div>
                         </th>

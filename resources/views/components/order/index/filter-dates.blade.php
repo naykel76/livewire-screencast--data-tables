@@ -18,16 +18,17 @@
                 <div x-show="! showPicker" class="flex flex-col divide-y divide-gray-100 w-64">
                     @foreach ($filters->range::cases() as $range)
                         @unless ($range === $filters->range::Custom)
-                            {{-- @todo: cant wrap in x-popover.close because it messes with flex width styling...  --}}
-                            <button wire:click="$set('filters.range', '{{ $range }}')" x-on:click="$popover.close()" class="flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
-                                <div class="text-sm">{{ $range->label() }}</div>
+                            <x-popover.close>
+                                <button wire:click="$set('filters.range', '{{ $range }}')" class="w-full flex items-center justify-between text-gray-800 px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                                    <div class="text-sm">{{ $range->label() }}</div>
 
-                                @if ($filters->range === $range)
-                                    <x-icon.check />
-                                @endif
-                            </button>
+                                    @if ($filters->range === $range)
+                                        <x-icon.check />
+                                    @endif
+                                </button>
+                            </x-popover.close>
                         @else
-                            <button x-on:click="showPicker = true" class="flex items-center justify-between px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
+                            <button x-on:click="showPicker = true" class="w-full flex items-center justify-between px-3 py-2 gap-2 cursor-pointer hover:bg-gray-100">
                                 <div class="text-sm text-gray-800">Custom range</div>
 
                                 <div class="text-gray-500">
@@ -49,6 +50,7 @@
                         <div class="flex flex-col px-3 pt-3 pb-2 gap-4">
                             <span class="font-semibold text-gray-800">Is between:</span>
 
+                            {{-- @todo: fill these with default values... --}}
                             <div class="flex justify-between items-center gap-2">
                                 <input wire:model="filters.start" type="date" class="text-gray-700 rounded border border-gray-300 bg-white px-2 py-1">
 

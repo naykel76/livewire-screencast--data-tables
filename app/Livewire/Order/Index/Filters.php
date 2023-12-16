@@ -82,6 +82,10 @@ class Filters extends Form
 
     protected function applyRange($query)
     {
+        if ($this->range === Range::All_Time) {
+            return $query;
+        }
+
         $dateRange = $this->range->dates(
             $this->start,
             $this->end,

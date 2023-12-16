@@ -117,7 +117,6 @@ class Table extends Component
         $this->applySorting($query);
 
         // Handle pagination...
-        // @todo: reset pagination when search changes...
         $orders = $query->paginate(10);
 
         $this->orderIdsOnPage = $orders->map(fn ($i) => (string) $i->id)->toArray();

@@ -48,7 +48,6 @@ class Chart extends Component
     public function render()
     {
         // @todo: find a better way...
-        // @todo: make scripts run before dispatches (because /supportEvents is use in imports earlier on...)
         $this->dispatch('update-chart', data: $this->getChartData())->self();
 
         return view('livewire.order.index.chart');
