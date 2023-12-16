@@ -7,20 +7,20 @@ use Illuminate\Support\Carbon;
 enum Range: string
 {
     case All_Time = 'all';
-    case Today = 'today';
-    case Last_7 = 'last7';
-    case Last_30 = 'last30';
     case Year = 'year';
+    case Last_30 = 'last30';
+    case Last_7 = 'last7';
+    case Today = 'today';
     case Custom = 'custom';
 
     public function label($start = null, $end = null)
     {
         return match ($this) {
             static::All_Time => 'All Time',
-            static::Today => 'All Time',
-            static::Last_7 => 'Last 7 Days',
+            static::Year => 'This Year',
             static::Last_30 => 'Last 30 Days',
-            static::Year => 'Year',
+            static::Last_7 => 'Last 7 Days',
+            static::Today => 'Today',
             static::Custom => ($start && $end)
                 ? "{$start} - {$end}"
                 : 'Custom',

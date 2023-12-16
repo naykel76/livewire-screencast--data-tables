@@ -3,8 +3,8 @@
         <svg width="100%" height="100%" viewBox="0 0 973 160" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <radialGradient cx="52.9024929%" cy="32.3591868%" fx="52.9024929%" fy="32.3591868%" r="135.306052%" gradientTransform="translate(0.529025,0.323592),scale(0.123294,1.000000),rotate(83.414672),scale(1.000000,4.473134),translate(-0.529025,-0.323592)" id="radialGradient-1">
-                    <stop stop-color="#D9E6FE" stop-opacity="0.852641499" offset="0%"></stop>
-                    <stop stop-color="#F1F6FE" stop-opacity="0.608517093" offset="55.9854233%"></stop>
+                    <stop stop-color="#ebebeb" stop-opacity="0.852641499" offset="0%"></stop>
+                    <stop stop-color="#F7F7F7" stop-opacity="0.608517093" offset="55.9854233%"></stop>
                     <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
                 </radialGradient>
             </defs>
