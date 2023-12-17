@@ -25,12 +25,15 @@ class Order extends Model
 
     public function archive()
     {
-        //
+        $this->status = 'archived';
+
+        $this->save();
     }
 
     public function refund()
     {
         $this->status = 'refunded';
+
         $this->save();
     }
 

@@ -17,7 +17,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         $biasedIdx = fake()->biasedNumberBetween(1, 5, fn ($i) => 1 - sqrt($i));
-        $status = $biasedIdx < 4 ? 'paid' : fake()->randomElement(['refunded', 'failed']);
+        $status = $biasedIdx < 4 ? 'paid' : fake()->randomElement(['refunded', 'failed', 'archived']);
 
         return [
             'number' => fake()->randomNumber(5, strict: true),

@@ -48,7 +48,7 @@ class Table extends Component
     public function archive()
     {
         sleep(1);
-        // @todo: add a status change to "archived"
+
         $orders = $this->store->orders()->whereIn('id', $this->selectedOrderIds)->get();
 
         foreach ($orders as $order) {

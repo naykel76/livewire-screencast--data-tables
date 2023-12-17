@@ -47,7 +47,6 @@ class Chart extends Component
 
     public function render()
     {
-        // @todo: find a better way...
         $this->dispatch('update-chart', data: $this->getChartData())->self();
 
         return view('livewire.order.index.chart');
