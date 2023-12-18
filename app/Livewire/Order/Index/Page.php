@@ -14,8 +14,6 @@ class Page extends Component
 
     public function render()
     {
-        sleep(1);
-
         return view('livewire.order.index.page', [
             'orders' => $this->store->orders()->paginate(10),
         ]);
