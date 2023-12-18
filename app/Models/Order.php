@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Number;
 
 class Order extends Model
 {
     use HasFactory;
 
     protected $casts = [
+        'status' => Status::class,
         'ordered_at' => 'datetime',
     ];
 
@@ -23,6 +26,25 @@ class Order extends Model
         return $this->belongsTo(Store::class);
     }
 
+    public function getAvatarAttribute()
+    {
+        return 'https://i.pravatar.cc/300?img='.((string) crc32($this->email))[0];
+    }
+
+    public function dateForHumans()
+    {
+        return $this->ordered_at->format(
+            $this->ordered_at->year === now()->year
+                ? 'M d, g:i A'
+                : 'M d, Y, g:i A'
+        );
+    }
+
+    public function amountForHumans()
+    {
+        return Number::currency($this->amount);
+    }
+
     public function archive()
     {
         $this->delete();
@@ -33,10 +55,5 @@ class Order extends Model
         $this->status = 'refunded';
 
         $this->save();
-    }
-
-    public function getAvatarAttribute()
-    {
-        return 'https://i.pravatar.cc/300?img='.((string) crc32($this->email))[0];
     }
 }
