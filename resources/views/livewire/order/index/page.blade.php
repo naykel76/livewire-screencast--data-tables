@@ -56,10 +56,10 @@
 
         <div class="pt-4 flex justify-between items-center">
             <div class="text-gray-700 text-sm">
-                Results: 2,800
+                Results: {{ \Illuminate\Support\Number::format($orders->total()) }}
             </div>
 
-            {{-- Pagination links... --}}
+            {{ $orders->links('livewire.order.index.pagination') }}
         </div>
     </div>
 </div>
