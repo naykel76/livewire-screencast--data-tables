@@ -1,6 +1,9 @@
 <div class="w-full flex flex-col gap-8">
     <div class="flex justify-between items-center">
-        <h1 class="font-semibold text-3xl text-gray-800">Orders</h1>
+        <div class="flex flex-col gap-1">
+           <h1 class="font-semibold text-3xl text-gray-800">Orders</h1>
+           <p class="text-sm text-gray-500">{{ $store->name }}</p>
+        </div>
 
         <div class="flex gap-2">
             <x-order.index.filter-products :$filters wire:model.live="filters.selectedProductIds" />

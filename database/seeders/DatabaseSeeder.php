@@ -19,18 +19,18 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Store::create([
-            'name' => 'Jelly\'s Jeneral Store',
+            'name' => 'MLM Industries',
             'user_id' => 1,
         ]);
 
-        \App\Models\Product::create(['name' => 'First product', 'store_id' => 1]);
-        \App\Models\Product::create(['name' => 'Second product', 'store_id' => 1]);
-        \App\Models\Product::create(['name' => 'Third product', 'store_id' => 1]);
-        \App\Models\Product::create(['name' => 'Fourth product', 'store_id' => 1]);
+        \App\Models\Product::create(['name' => 'Energy Drink', 'store_id' => 1]);
+        \App\Models\Product::create(['name' => 'Water Purifier', 'store_id' => 1]);
+        \App\Models\Product::create(['name' => 'Toothpaste', 'store_id' => 1]);
+        \App\Models\Product::create(['name' => 'Magic Bracelet', 'store_id' => 1]);
 
-        \App\Models\Order::factory()->count(100)->create(['product_id' => '1']);
-        \App\Models\Order::factory()->count(100)->create(['product_id' => '2']);
-        \App\Models\Order::factory()->count(100)->create(['product_id' => '3']);
-        \App\Models\Order::factory()->count(100)->create(['product_id' => '4']);
+        \App\Models\Order::factory()->count(902)->create(['product_id' => '1']);
+        \App\Models\Order::factory()->count(760)->create(['product_id' => '2']);
+        \App\Models\Order::factory()->count(543)->create(['product_id' => '3']);
+        \App\Models\Order::factory()->count(632)->create(['product_id' => '4']);
     }
 }

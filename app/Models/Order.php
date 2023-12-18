@@ -25,9 +25,7 @@ class Order extends Model
 
     public function archive()
     {
-        $this->status = 'archived';
-
-        $this->save();
+        $this->delete();
     }
 
     public function refund()
