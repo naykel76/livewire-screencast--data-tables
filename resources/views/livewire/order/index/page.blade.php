@@ -15,19 +15,27 @@
                 <thead>
                     <tr>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
-                            <div>Order #</div>
+                            <x-order.index.sortable column="number" :$sortCol :$sortAsc>
+                                <div>Order #</div>
+                            </x-order.index.sortable>
                         </th>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
-                            <div>Status</div>
+                            <x-order.index.sortable column="status" :$sortCol :$sortAsc>
+                                <div>Status</div>
+                            </x-order.index.sortable>
                         </th>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <div>Customer</div>
                         </th>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
-                            <div>Date</div>
+                            <x-order.index.sortable column="date" :$sortCol :$sortAsc>
+                                <div>Date</div>
+                            </x-order.index.sortable>
                         </th>
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
-                            <div>Amount</div>
+                            <x-order.index.sortable column="amount" :$sortCol :$sortAsc class="flex-row-reverse">
+                                <div>Amount</div>
+                            </x-order.index.sortable>
                         </th>
                     </tr>
                 </thead>
