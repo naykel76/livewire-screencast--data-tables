@@ -27,6 +27,11 @@ class Page extends Component
         $this->resetPage();
     }
 
+    public function export()
+    {
+        return $this->store->orders()->toCsv();
+    }
+
     public function refund(Order $order)
     {
         $this->authorize('update', $order);
