@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-8">
-    <div class="grid grid-cols-2 gap-2">
-        <div class="relative text-sm text-gray-800">
+    <div class="grid grid-cols-8 gap-2">
+        <div class="relative text-sm text-gray-800 col-span-3">
             <div class="absolute pl-2 left-0 top-0 bottom-0 flex items-center pointer-events-none text-gray-500">
                 <x-icon.magnifying-glass />
             </div>
@@ -8,19 +8,7 @@
             <input wire:model.live="search" type="text" placeholder="Search email or order #" class="block w-full rounded-lg border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
         </div>
 
-        <div class="flex gap-2 justify-end">
-            <div class="flex">
-                <form wire:submit="export">
-                    <button type="submit" class="flex items-center gap-2 rounded-lg border px-3 py-1.5 bg-white font-medium text-sm text-gray-700 hover:bg-gray-200">
-                        <x-icon.arrow-down-tray wire:loading.remove wire:target="export" />
-
-                        <x-icon.spinner wire:loading wire:target="export" class="text-gray-700" />
-
-                        Export
-                    </button>
-                </form>
-            </div>
-        </div>
+        <x-order.index.bulk-actions />
     </div>
 
     <div>
@@ -28,9 +16,13 @@
             <table class="min-w-full table-fixed divide-y divide-gray-300 text-gray-800">
                 <thead>
                     <tr>
+                        <th>
+                            {{-- Checkboxes... --}}
+                        </th>
+
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <x-order.index.sortable column="number" :$sortCol :$sortAsc>
-                                <div>Order #</div>
+                                <div class="whitespace-nowrap">Order #</div>
                             </x-order.index.sortable>
                         </th>
 
@@ -64,6 +56,12 @@
                 <tbody class="divide-y divide-gray-200 bg-white text-gray-700">
                     @foreach ($orders as $order)
                         <tr wire:key="{{ $order->id }}">
+                            <td class="whitespace-nowrap p-3 text-sm">
+                                <div class="flex items-center">
+                                    <input wire:model="selectedOrderIds" value="{{ $order->id }}" type="checkbox" class="rounded border-gray-300 shadow">
+                                </div>
+                            </td>
+
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="flex gap-1">
                                     <span class="text-gray-300">#</span>
@@ -129,11 +127,11 @@
                 </tbody>
             </table>
 
-            <div wire:loading wire:target="sortBy, search, nextPage, previousPage, archive" class="absolute inset-0 bg-white opacity-50">
+            <div wire:loading wire:target="sortBy, search, nextPage, previousPage, archive, archiveSelected" class="absolute inset-0 bg-white opacity-50">
                 {{--  --}}
             </div>
 
-            <div wire:loading.flex wire:target="sortBy, search, nextPage, previousPage, archive" class="flex justify-center items-center absolute inset-0">
+            <div wire:loading.flex wire:target="sortBy, search, nextPage, previousPage, archive, archiveSelected" class="flex justify-center items-center absolute inset-0">
                 <x-icon.spinner size="10" class="text-gray-500" />
             </div>
         </div>

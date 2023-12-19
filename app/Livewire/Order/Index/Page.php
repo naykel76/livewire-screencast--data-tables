@@ -22,6 +22,8 @@ class Page extends Component
     #[Url]
     public $sortAsc = false;
 
+    public $selectedOrderIds = [];
+
     public function updatedSearch()
     {
         $this->resetPage();
@@ -32,11 +34,29 @@ class Page extends Component
         return $this->store->orders()->toCsv();
     }
 
+    public function refundSelected()
+    {
+        $orders = $this->store->orders()->whereIn('id', $this->selectedOrderIds)->get();
+
+        foreach ($orders as $order) {
+            $this->refund($order);
+        }
+    }
+
     public function refund(Order $order)
     {
         $this->authorize('update', $order);
 
         $order->refund();
+    }
+
+    public function archiveSelected()
+    {
+        $orders = $this->store->orders()->whereIn('id', $this->selectedOrderIds)->get();
+
+        foreach ($orders as $order) {
+            $this->archive($order);
+        }
     }
 
     public function archive(Order $order)
