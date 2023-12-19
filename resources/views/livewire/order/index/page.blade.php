@@ -19,19 +19,23 @@
                                 <div>Order #</div>
                             </x-order.index.sortable>
                         </th>
+
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <x-order.index.sortable column="status" :$sortCol :$sortAsc>
                                 <div>Status</div>
                             </x-order.index.sortable>
                         </th>
+
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <div>Customer</div>
                         </th>
+
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <x-order.index.sortable column="date" :$sortCol :$sortAsc>
                                 <div>Date</div>
                             </x-order.index.sortable>
                         </th>
+
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
                             <x-order.index.sortable column="amount" :$sortCol :$sortAsc class="flex-row-reverse">
                                 <div>Amount</div>
@@ -48,12 +52,14 @@
                                     {{ $order->number }}
                                 </div>
                             </td>
+
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="rounded-full py-0.5 pl-2 pr-1 inline-flex font-medium items-center gap-1 text-{{ $order->status->color() }}-600 text-xs bg-{{ $order->status->color() }}-100 opacity-75">
                                     <div>{{ $order->status->label() }}</div>
                                     <x-dynamic-component :component="$order->status->icon()" />
                                 </div>
                             </td>
+
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="flex items-center gap-2">
                                     <div class="w-5 h-5 rounded-full overflow-hidden">
@@ -62,9 +68,11 @@
                                     <div>{{ $order->email }}</div>
                                 </div>
                             </td>
+
                             <td class="whitespace-nowrap p-3 text-sm">
                                 {{ $order->dateForHumans() }}
                             </td>
+
                             <td class="w-auto whitespace-nowrap p-3 text-sm text-gray-800 font-semibold text-right">
                                 {{ $order->amountForHumans() }}
                             </td>
