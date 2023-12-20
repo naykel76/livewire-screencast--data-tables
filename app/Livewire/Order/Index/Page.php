@@ -12,26 +12,13 @@ use App\Models\Order;
 #[Lazy]
 class Page extends Component
 {
-    use WithPagination;
+    use WithPagination, Sortable, Searchable;
 
     public Store $store;
-
-    public $search = '';
-
-    #[Url]
-    public $sortCol;
-
-    #[Url]
-    public $sortAsc = false;
 
     public $selectedOrderIds = [];
 
     public $orderIdsOnPage = [];
-
-    public function updatedSearch()
-    {
-        $this->resetPage();
-    }
 
     public function export()
     {
@@ -68,41 +55,6 @@ class Page extends Component
         $this->authorize('update', $order);
 
         $order->archive();
-    }
-
-    public function sortBy($column)
-    {
-        if ($this->sortCol === $column) {
-            $this->sortAsc = ! $this->sortAsc;
-        } else {
-            $this->sortCol = $column;
-            $this->sortAsc = false;
-        }
-    }
-
-    protected function applySorting($query)
-    {
-        if ($this->sortCol) {
-            $column = match ($this->sortCol) {
-                'number' => 'number',
-                'status' => 'status',
-                'date' => 'ordered_at',
-                'amount' => 'amount',
-            };
-
-            $query->orderBy($column, $this->sortAsc ? 'asc' : 'desc');
-        }
-
-        return $query;
-    }
-
-    protected function applySearch($query)
-    {
-        return $this->search === ''
-            ? $query
-            : $query
-                ->where('email', 'like', '%'.$this->search.'%')
-                ->orWhere('number', 'like', '%'.$this->search.'%');
     }
 
     public function render()
