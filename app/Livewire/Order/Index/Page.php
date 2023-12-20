@@ -3,8 +3,8 @@
 namespace App\Livewire\Order\Index;
 
 use Livewire\WithPagination;
-use Livewire\Component;
 use Livewire\Attributes\Url;
+use Livewire\Component;
 use App\Models\Store;
 use App\Models\Order;
 
