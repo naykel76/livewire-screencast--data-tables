@@ -16,8 +16,10 @@
             <table class="min-w-full table-fixed divide-y divide-gray-300 text-gray-800">
                 <thead>
                     <tr>
-                        <th>
-                            {{-- Checkboxes... --}}
+                        <th class="p-3 text-left text-sm font-semibold text-gray-900">
+                            <div class="flex items-center">
+                                <x-order.index.check-all />
+                            </div>
                         </th>
 
                         <th class="p-3 text-left text-sm font-semibold text-gray-900">
