@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use App\Models\Store;
 use App\Models\Order;
+use Livewire\Attributes\Renderless;
 
 class Page extends Component
 {
@@ -27,6 +28,7 @@ class Page extends Component
         $this->resetPage();
     }
 
+    #[Renderless]
     public function export()
     {
         return $this->store->orders()->toCsv();
