@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Order\Index;
 
+use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Component;
-use Livewire\Attributes\Url;
-use Livewire\Attributes\Lazy;
 use App\Models\Store;
 use App\Models\Order;
 
@@ -107,8 +107,6 @@ class Page extends Component
 
     public function render()
     {
-        sleep(2);
-
         $query = $this->store->orders();
 
         $query = $this->applySearch($query);
