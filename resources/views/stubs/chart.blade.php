@@ -1,3 +1,5 @@
+DB::raw("strftime('%Y', ordered_at) || '-' || strftime('%m', ordered_at) as increment"),
+
 {{-- Template... --}}
 <div>
     <div class="relative h-[10rem] w-full">
