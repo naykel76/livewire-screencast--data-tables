@@ -12,11 +12,6 @@ class Chart extends Component
 
     public $dataset = [];
 
-    public function mount()
-    {
-        $this->fillDataset();
-    }
-
     public function fillDataset()
     {
         $results = $this->store->orders()
@@ -33,6 +28,13 @@ class Chart extends Component
 
     public function render()
     {
+        $this->fillDataset();
+
         return view('livewire.order.index.chart');
+    }
+
+    public function placeholder()
+    {
+        return view('livewire.order.index.chart-placeholder');
     }
 }

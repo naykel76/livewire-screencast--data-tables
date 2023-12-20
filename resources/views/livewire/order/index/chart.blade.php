@@ -1,5 +1,10 @@
 <div>
-    <div x-data="chart" class="relative h-[10rem] w-full overflow-hidden">
+    <div
+        x-data="chart"
+        wire:ignore
+        wire:loading.class="opacity-50"
+        class="relative h-[10rem] w-full overflow-hidden"
+    >
         <canvas class="w-full"></canvas>
     </div>
 </div>
@@ -11,9 +16,28 @@
 @script
 <script>
     Alpine.data('chart', () => {
+        let chart
+
         return {
             init() {
-                this.initChart(this.$wire.dataset)
+                chart = this.initChart(this.$wire.dataset)
+
+                this.$wire.$watch('dataset', () => {
+                    this.updateChart(chart, this.$wire.dataset)
+                })
+            },
+
+            destroy() {
+                chart.destroy()
+            },
+
+            updateChart(chart, dataset)
+            {
+                let { labels, values } = dataset
+
+                chart.data.labels = labels
+                chart.data.datasets[0].data = values
+                chart.update()
             },
 
             initChart(dataset) {
