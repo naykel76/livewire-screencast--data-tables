@@ -3,11 +3,13 @@
 namespace App\Livewire\Order\Index;
 
 use Livewire\WithPagination;
-use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\Attributes\Url;
+use Livewire\Attributes\Lazy;
 use App\Models\Store;
 use App\Models\Order;
 
+#[Lazy]
 class Page extends Component
 {
     use WithPagination;
@@ -105,6 +107,8 @@ class Page extends Component
 
     public function render()
     {
+        sleep(2);
+
         $query = $this->store->orders();
 
         $query = $this->applySearch($query);
@@ -118,5 +122,10 @@ class Page extends Component
         return view('livewire.order.index.page', [
             'orders' => $orders,
         ]);
+    }
+
+    public function placeholder()
+    {
+        return view('livewire.order.index.table-placeholder');
     }
 }
