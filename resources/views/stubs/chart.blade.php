@@ -14,7 +14,7 @@
 
     let { labels, values } = {
         labels: ['foo', 'bar', 'baz'],
-        valuess: [1, 2, 3],
+        values: [1, 2, 3],
     }
 
     return new Chart(el, {
