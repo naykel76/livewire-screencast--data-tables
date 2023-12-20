@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Order\Index;
 
+use Livewire\Attributes\Renderless;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class Table extends Component
 
     public $orderIdsOnPage = [];
 
+    #[Renderless]
     public function export()
     {
         return $this->store->orders()->toCsv();
