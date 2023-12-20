@@ -1,62 +1,43 @@
+{{-- Template... --}}
 <div>
-    <div class="relative h-[10rem] w-full" wire:ignore wire:loading.class="opacity-50 grayscale-[50%]">
+    <div class="relative h-[10rem] w-full">
         <canvas class="w-full"></canvas>
     </div>
 </div>
 
-@assets
+{{-- Chart.js CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@endassets
 
-@script
+{{-- Initialize Chart.js --}}
 <script>
-    let chart
+    let el = document.querySelector('canvas')
 
-    $wire.on('update-chart', ({ data }) => {
-        if (chart) {
-            updateChart(data)
-        } else {
-            setTimeout(() => {
-                chart = initializeChart(
-                    $wire.$el.querySelector('canvas'),
-                    data
-                )
-            })
-        }
-    })
-
-    function updateChart(data) {
-        let { labels, values } = data
-
-        chart.data.labels = labels
-        chart.data.datasets[0].data = values
-        chart.update()
+    let { labels, values } = {
+        labels: ['foo', 'bar', 'baz'],
+        valuess: [1, 2, 3],
     }
 
-    function initializeChart(el, data) {
-        let { labels, values } = data
-
-        return new Chart(el, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    tension: 0.1,
-                    label: 'Order amount',
-                    data: values,
-                    fill: {
-                        target: 'origin',
-                        above: '#1d4fd810',
-                    },
-                    pointStyle: 'circle',
-                    pointRadius: 0,
-                    pointBackgroundColor: '#5ba5e1',
-                    pointBorderColor: '#5ba5e1',
-                    pointHoverRadius: 4,
-                    borderWidth: 2,
-                }]
-            },
-            options: {
+    return new Chart(el, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                tension: 0.1,
+                label: 'Order amount',
+                data: values,
+                fill: {
+                    target: 'origin',
+                    above: '#1d4fd810',
+                },
+                pointStyle: 'circle',
+                pointRadius: 0,
+                pointBackgroundColor: '#5ba5e1',
+                pointBorderColor: '#5ba5e1',
+                pointHoverRadius: 4,
+                borderWidth: 2,
+            }]
+        },
+        options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
@@ -106,9 +87,7 @@
                         display: false
                     },
                 },
-            }
-            }
-        })
-    }
+            },
+        },
+    })
 </script>
-@endscript
