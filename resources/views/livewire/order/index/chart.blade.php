@@ -13,16 +13,13 @@
     Alpine.data('chart', () => {
         return {
             init() {
-                this.initChart()
+                this.initChart(this.$wire.dataset)
             },
 
-            initChart() {
+            initChart(dataset) {
                 let el = this.$wire.$el.querySelector('canvas')
 
-                let { labels, values } = {
-                    labels: ['foo', 'bar', 'baz'],
-                    values: [1, 2, 3],
-                }
+                let { labels, values } = dataset
 
                 return new Chart(el, {
                     type: 'line',
