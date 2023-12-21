@@ -15,7 +15,8 @@
 
 @script
 <script>
-    Alpine.data('chart', () => {
+    // @todo: fix this...
+    Alpine.data('chart', Alpine.skipDuringClone(() => {
         let chart
 
         return {
@@ -117,6 +118,6 @@
                 })
             },
         }
-    })
+    }))
 </script>
 @endscript
