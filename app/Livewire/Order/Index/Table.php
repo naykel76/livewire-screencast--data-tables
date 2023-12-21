@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Order\Index;
 
-use Livewire\Attributes\Renderless;
-use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Component;
+use Livewire\Attributes\Url;
+use Livewire\Attributes\Renderless;
+use Livewire\Attributes\Reactive;
 use App\Models\Store;
 use App\Models\Order;
 
@@ -14,6 +15,9 @@ class Table extends Component
     use WithPagination, Sortable, Searchable;
 
     public Store $store;
+
+    #[Reactive]
+    public Filters $filters;
 
     public $selectedOrderIds = [];
 
@@ -64,6 +68,8 @@ class Table extends Component
         $query = $this->applySearch($query);
 
         $query = $this->applySorting($query);
+
+        $query = $this->filters->apply($query);
 
         $orders = $query->paginate(5);
 

@@ -2,13 +2,17 @@
 
 namespace App\Livewire\Order\Index;
 
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Attributes\Reactive;
+use Illuminate\Support\Facades\DB;
 use App\Models\Store;
 
 class Chart extends Component
 {
     public Store $store;
+
+    #[Reactive]
+    public Filters $filters;
 
     public $dataset = [];
 
@@ -19,6 +23,9 @@ class Chart extends Component
                 DB::raw("strftime('%Y', ordered_at) || '-' || strftime('%m', ordered_at) as increment"),
                 DB::raw('SUM(amount) as total'),
             )
+            ->tap(function ($query) {
+                $this->filters->apply($query);
+            })
             ->groupBy('increment')
             ->get();
 
