@@ -11,8 +11,9 @@ enum Range: string
     case Last_30 = 'last30';
     case Last_7 = 'last7';
     case Today = 'today';
+    case Custom = 'custom';
 
-    public function label()
+    public function label($start = null, $end = null)
     {
         return match ($this) {
             static::All_Time => 'All Time',
@@ -20,6 +21,9 @@ enum Range: string
             static::Last_30 => 'Last 30 Days',
             static::Last_7 => 'Last 7 Days',
             static::Today => 'Today',
+            static::Custom => ($start !== null && $end !== null)
+                ? str($start)->replace('-', '/') . ' - ' . str($end)->replace('-', '/')
+                : 'Custom Range',
         };
     }
 

@@ -4,6 +4,7 @@ namespace App\Livewire\Order\Index;
 
 use Livewire\Form;
 use Livewire\Attributes\Url;
+use Illuminate\Support\Carbon;
 use App\Models\Store;
 
 class Filters extends Form
@@ -16,17 +17,32 @@ class Filters extends Form
     #[Url]
     public Range $range = Range::All_Time;
 
+    #[Url]
+    public $start;
+
+    #[Url]
+    public $end;
+
     public function init($store)
     {
         $this->store = $store;
 
-        $this->fillSelectedProductIds();
+        $this->initSelectedProductIds();
+        $this->initRange();
     }
 
-    public function fillSelectedProductIds()
+    public function initSelectedProductIds()
     {
         if (empty($this->selectedProductIds)) {
             $this->selectedProductIds = $this->products()->pluck('id')->toArray();
+        }
+    }
+
+    public function initRange()
+    {
+        if ($this->range !== Range::Custom) {
+            $this->start = null;
+            $this->end = null;
         }
     }
 
@@ -52,6 +68,13 @@ class Filters extends Form
     {
         if ($this->range === Range::All_Time) {
             return $query;
+        }
+
+        if ($this->range === Range::Custom) {
+            $start = Carbon::createFromFormat('Y-m-d', $this->start);
+            $end = Carbon::createFromFormat('Y-m-d', $this->end);
+
+            return $query->whereBetween('ordered_at', [$start, $end]);
         }
 
         return $query->whereBetween('ordered_at', $this->range->dates());
