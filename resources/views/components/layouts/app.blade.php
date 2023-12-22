@@ -12,8 +12,10 @@
     @livewireStyles
 </head>
 <body>
-    <main class="w-full px-64 flex justify-center py-12">
-        {{ $slot }}
+    <main class="mx-auto flex justify-center px-8 lg:px-16">
+        <div class="py-12 w-full max-w-[50rem]">
+            {{ $slot }}
+        </div>
     </main>
 
     @livewireScripts
