@@ -62,6 +62,7 @@
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="flex gap-1">
                                     <span class="text-gray-300">#</span>
+
                                     {{ $order->number }}
                                 </div>
                             </td>
@@ -69,6 +70,7 @@
                             <td class="whitespace-nowrap p-3 text-sm">
                                 <div class="rounded-full py-0.5 pl-2 pr-1 inline-flex font-medium items-center gap-1 text-{{ $order->status->color() }}-600 text-xs bg-{{ $order->status->color() }}-100 opacity-75">
                                     <div>{{ $order->status->label() }}</div>
+
                                     <x-dynamic-component :component="$order->status->icon()" />
                                 </div>
                             </td>
@@ -78,6 +80,7 @@
                                     <div class="w-5 h-5 rounded-full overflow-hidden">
                                         <img src="{{ $order->avatar }}" alt="Customer avatar">
                                     </div>
+
                                     <div>{{ $order->email }}</div>
                                 </div>
                             </td>
