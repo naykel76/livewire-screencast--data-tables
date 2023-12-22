@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-8">
-    <div class="grid grid-cols-8 gap-2">
+    <div class="flex flex-col sm:grid grid-cols-8 gap-2">
         <div class="relative text-sm text-gray-800 col-span-3">
             <div class="absolute pl-2 left-0 top-0 bottom-0 flex items-center pointer-events-none text-gray-500">
                 <x-icon.magnifying-glass />
@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex gap-2 justify-end col-span-5">
-            <div class="flex">
+            <div class="hidden sm:flex">
                 <button type="button" class="flex items-center gap-2 rounded-lg border px-3 py-1.5 bg-white font-medium text-sm text-gray-700 hover:bg-gray-200">
                     <x-icon.arrow-down-tray />
 
@@ -19,8 +19,8 @@
         </div>
     </div>
 
-    <div>
-        <div class="relative animate-pulse w-[49.5rem]">
+    <div class="overflow-x-auto w-full">
+        <div class="relative animate-pulse min-w-[49.5rem]">
             <div class="p-3">
                 <div class="w-full bg-gray-100 rounded-lg">&nbsp;</div>
             </div>

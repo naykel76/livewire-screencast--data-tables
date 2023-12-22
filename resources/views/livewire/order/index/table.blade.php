@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-8">
-    <div class="grid grid-cols-8 gap-2">
+    <div class="flex flex-col sm:grid grid-cols-8 gap-2">
         <x-order.index.search />
 
         <x-order.index.bulk-actions />
     </div>
 
     <div>
-        <div class="relative">
+        <div class="relative overflow-x-auto">
             {{-- Orders table... --}}
             <table class="min-w-full table-fixed divide-y divide-gray-300 text-gray-800">
                 <thead>

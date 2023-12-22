@@ -1,5 +1,5 @@
-<div class="flex gap-2 justify-end col-span-5">
-    <div class="flex gap-2" x-show="$wire.selectedOrderIds.length > 0" x-cloak>
+<div class="flex flex-col sm:flex-row gap-2 sm:justify-end col-span-5">
+    <div class="flex flex-row-reverse justify-end sm:justify-start sm:flex-row gap-2" x-show="$wire.selectedOrderIds.length > 0" x-cloak>
         <div class="flex items-center gap-1 text-sm text-gray-600">
             <span x-text="$wire.selectedOrderIds.length"></span>
 
@@ -31,7 +31,7 @@
         </form>
     </div>
 
-    <div class="flex">
+    <div class="hidden sm:flex">
         <form wire:submit="export">
             <button type="submit" class="flex items-center gap-2 rounded-lg border px-3 py-1.5 bg-white font-medium text-sm text-gray-700 hover:bg-gray-200">
                 <x-icon.arrow-down-tray wire:loading.remove wire:target="export" />

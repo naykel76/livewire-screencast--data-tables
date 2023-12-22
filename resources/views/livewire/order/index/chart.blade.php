@@ -3,7 +3,7 @@
         x-data="chart"
         wire:ignore
         wire:loading.class="opacity-50"
-        class="relative h-[10rem] w-full overflow-hidden"
+        class="relative h-[5rem] sm:h-[10rem] w-full overflow-hidden"
     >
         <canvas class="w-full"></canvas>
     </div>

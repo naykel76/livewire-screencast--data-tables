@@ -1,4 +1,4 @@
-<div class="relative h-[10rem] w-full">
+<div class="relative h-[5rem] sm:h-[10rem] w-full">
     <div class="animate-pulse">
         <svg width="100%" height="100%" viewBox="0 0 973 160" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>

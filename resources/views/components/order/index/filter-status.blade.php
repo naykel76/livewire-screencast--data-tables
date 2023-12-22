@@ -1,4 +1,4 @@
-<x-radio-group class="grid grid-cols-4 gap-2" wire:model.live="filters.status">
+<x-radio-group class="hidden sm:grid grid-cols-4 gap-2" wire:model.live="filters.status">
     @foreach ($filters->statuses() as $status)
         <x-radio-group.option
             :value="$status['value']"
