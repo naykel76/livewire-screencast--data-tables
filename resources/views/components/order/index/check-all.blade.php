@@ -7,11 +7,13 @@
     Alpine.data('checkAll', () => {
         return {
             init() {
-                this.$wire.$watch('selectedOrderIds', () => {
+                this.updateCheckAllState()
+
+                this.$watch('$wire.selectedOrderIds', () => {
                     this.updateCheckAllState()
                 })
 
-                this.$wire.$watch('orderIdsOnPage', () => {
+                this.$watch('$wire.orderIdsOnPage', () => {
                     this.updateCheckAllState()
                 })
             },
