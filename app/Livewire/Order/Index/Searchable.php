@@ -17,8 +17,9 @@ trait Searchable
     {
         return $this->search === ''
             ? $query
-            : $query
-                ->where('email', 'like', '%'.$this->search.'%')
-                ->orWhere('number', 'like', '%'.$this->search.'%');
+            : $query->where(function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
+                      ->orWhere('email', 'like', "%{$this->search}%");
+            });
     }
 }
