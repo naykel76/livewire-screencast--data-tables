@@ -10,7 +10,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "dev-main"
+        "livewire/livewire": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -63,11 +63,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": {
-        "local": {
-            "type": "path",
-            "url": "../../../Code/livewire"
-        }
-    }
+    "prefer-stable": true
 }

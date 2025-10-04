@@ -20,7 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        auth()->login(\App\Models\User::first());
+        // Only auto-login if running in the browser and users table exists
+        if (app()->runningInConsole() === false && 
+            \Illuminate\Support\Facades\Schema::hasTable('users') && 
+            \App\Models\User::count() > 0) {
+            auth()->login(\App\Models\User::first());
+        }
 
         Builder::macro('toCsv', function ($name = null) {
             $query = $this;
